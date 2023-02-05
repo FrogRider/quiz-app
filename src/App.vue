@@ -1,16 +1,24 @@
 <template>
-  <div id="nav">
-    <!-- <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> -->
+  <div>
+    <!-- <router-view v-if="!isQuizesLoading"/>
+    <div v-else>idinahuiiiii</div> -->
+    <router-view />
   </div>
-  
-  <!-- <router-view/> -->
-  <Quiz />
-  <Lorem />
 </template>
 
 <script setup>
-import Quiz from "@/components/Quiz.vue";
+import { onBeforeMount } from "vue";
+import useQuizesStore from "@/store/quizesStore.js";
+import { storeToRefs } from "pinia";
+
+const quizesStore = useQuizesStore();
+
+// const { isQuizesLoading } = storeToRefs(quizesStore);
+
+onBeforeMount(async () => {
+  await quizesStore.getQuizes();
+});
+// import Quiz from "@/components/Quiz.vue";
 </script>
 
 <style lang="scss">

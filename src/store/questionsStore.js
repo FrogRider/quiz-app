@@ -1,11 +1,8 @@
 import { defineStore } from 'pinia';
-// import questionsBase from '@/questions.json';
-import firebase from 'firebase';
-import { shuffle, timeout } from '@/utils';
+import { shuffle } from '@/utils';
 
 const useQuestionsStore = defineStore('questionsStore', {
   state: () => ({
-    isLoading: false,
     questions: [],
     randomizedQuestions: [],
     userAnswers: [],
@@ -30,20 +27,11 @@ const useQuestionsStore = defineStore('questionsStore', {
   },
   actions: {
     randomizeQuestions() {
-      this.randomizedQuestions = shuffle(this.questions);
+      this.randomizedQuestions = shuffle(this?.questions);
       this.timeStart = performance.now();
     },
-    async getQuestions() {
-      this.isLoading = true;
-      const questionsResponse = await firebase.database().ref('questions').once('value');
-      const questionsData = questionsResponse.val();
-      const res = Object.entries(questionsData).map(question => {
-        return {...question[1]}
-      })
-      this.questions = res;
-      console.log(res);
-      await timeout(1000);
-      this.isLoading = false;
+    setQuestions(questions) {
+      this.questions = questions;
     },
     addUserQuestion(question) {
       this.userAnswers.push(question)
