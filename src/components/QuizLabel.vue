@@ -1,28 +1,28 @@
 <template>
-  <div @click="goToQuiz">
-    {{ currentQuizName }}
-  </div>
+	<div>
+		{{ currentQuizName }} | <span role="button" @click="goToQuiz">go</span>
+	</div>
 </template>
 
 <script setup>
-import { defineProps, computed } from "vue";
-import { useRouter } from 'vue-router'
+	import { defineProps, computed } from 'vue'
+	import { useRouter } from 'vue-router'
 
-const router = useRouter();
+	const router = useRouter()
 
-const props = defineProps({
-  quiz: {
-    required: true,
-  },
-});
+	const props = defineProps({
+		quiz: {
+			required: true,
+		},
+	})
 
-const currentQuizName = computed(() => {
-  return props.quiz.quizName;
-});
+	const currentQuizName = computed(() => {
+		return props.quiz.quizName
+	})
 
-const goToQuiz = () => {
-  router.push({ name: "quiz", params: { 'quizId': props.quiz.key } });
-};
+	const goToQuiz = () => {
+		router.push({ name: 'quiz', params: { quizId: props.quiz.key } })
+	}
 </script>
 
 <style lang="scss" scoped></style>
