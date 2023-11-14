@@ -1,3 +1,3 @@
-export const QUIZES_PER_PAGE = 10
+export const QUIZES_PER_PAGE = 3
 
 export default {}
