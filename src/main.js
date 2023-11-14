@@ -1,8 +1,3 @@
-// import { createApp } from 'vue'
-// import './style.css'
-// import App from './App.vue'
-
-// createApp(App).mount('#app')
 import { createApp, h } from 'vue'
 import App from './App.vue'
 import router from '@/router'
@@ -17,8 +12,8 @@ createApp({
 	},
 	render: () => h(App),
 })
+	.use(createPinia())
 	.use(router)
 	// .use(Notifications)
-	.use(createPinia())
 	// .use(autoAnimatePlugin)
 	.mount('#app')

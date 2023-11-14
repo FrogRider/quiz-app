@@ -11,10 +11,13 @@
 	import useQuestionsStore from '@/store/questionsStore.js'
 	import useQuizesStore from '@/store/quizesStore.js'
 	import { storeToRefs } from 'pinia'
-	import { ref, computed, onMounted } from 'vue'
+	import { ref, computed } from 'vue'
+	import { QUIZES_PER_PAGE } from '@/utils/constants.js'
 	import firebase from 'firebase'
 
 	const quizesStore = useQuizesStore()
+	
+	const { quizesIdsList } = storeToRefs(quizesStore)
 
 	const quizId = ref(1)
 
@@ -22,9 +25,12 @@
 		// console.log(getQuiz.value)
 		const newQuiz = await firebase.database().ref('quizes').push(getQuiz.value)
 		await firebase.database().ref('quizesIds').push(newQuiz.key)
+		if (quizesIdsList.value.length < QUIZES_PER_PAGE || quizesIdsList.value.length == 0) {
+			quizesStore.addQuiz({ ...getQuiz.value, key: newQuiz.key })
+		}
 		quizesStore.addQuizId(newQuiz.key)
-		console.log({ ...getQuiz.value, key: newQuiz.key })
-		quizesStore.addQuiz({ ...getQuiz.value, key: newQuiz.key })
+		// console.log({ ...getQuiz.value, key: newQuiz.key })
+		// quizesStore.addQuiz({ ...getQuiz.value, key: newQuiz.key })
 		// quizesStore.addQuiz(1111)
 		// console.log(result.key)
 	}
@@ -139,10 +145,6 @@
 				},
 			],
 		}
-	})
-
-	onMounted(async () => {
-		// await firebase.database().ref(`quizes`).push(newQuiz);
 	})
 </script>
 

@@ -7,6 +7,8 @@
 <script setup>
 	import { defineProps } from 'vue'
 	import { useRouter } from 'vue-router'
+	import useQuizesStore from '@/store/quizesStore.js'
+	import { storeToRefs } from 'pinia'
 
 	const router = useRouter()
 
@@ -21,8 +23,13 @@
 		},
 	})
 
+	const quizesStore = useQuizesStore()
+
+	const { currentPage } = storeToRefs(quizesStore)
+
 	const goHome = () => {
-		router.push({ name: 'home' })
+		console.log(+currentPage.value + 1);
+		router.push({ name: 'home', params: { page: +currentPage.value + 1 } })
 	}
 
 	const handleClick = () => {

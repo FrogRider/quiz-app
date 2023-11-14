@@ -4,7 +4,9 @@ import Quiz from '@/views/Quiz.vue'
 import QuizAdd from '@/components/QuizAdd.vue'
 
 const routes = [
-	{ path: '/', name: 'home', component: Home },
+	{ path: '/:page?',
+		name: 'home',
+		component: Home },
 	{ path: '/add', name: 'add', component: QuizAdd },
 	{ path: '/quiz/:quizId', name: 'quiz', component: Quiz },
 ]

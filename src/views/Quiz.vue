@@ -1,9 +1,6 @@
 <!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
 	<div>
-		<!-- <StartQuiz v-if="!isUserReady"/>
-    <Question v-else-if="questionsLeft > 0"/>
-    <Final v-else v-if="!isQuizesLoading"/> -->
 		<StartQuiz v-if="isStage('start')" />
 		<Question v-if="isStage('inProgress')" />
 		<Final v-if="isStage('finish')" />

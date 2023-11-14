@@ -28,6 +28,7 @@ const useQuizesStore = defineStore('quizesStore', {
 	},
 	actions: {
 		async getQuizes(startAfter = '') {
+			console.log(startAfter)
 			this.isQuizesLoading = true
 			const quizesResponse = await firebase
 				.database()
@@ -37,6 +38,7 @@ const useQuizesStore = defineStore('quizesStore', {
 				.limitToFirst(QUIZES_PER_PAGE)
 				.once('value')
 			const quizesData = quizesResponse.val()
+			console.log(quizesData)
 
 			if (!quizesData) return []
 
@@ -50,6 +52,13 @@ const useQuizesStore = defineStore('quizesStore', {
 			this.isQuizesLoading = false
 		},
 
+		async getQuizesByPage(page) {
+			console.log('GET FOR PAGE', page)
+			const startAfter = this.quizesIdsList.at((page - 1) * QUIZES_PER_PAGE - 2)
+			this.getQuizes(startAfter)
+			// QUIZES_PER_PAGE
+		},
+
 		addQuiz(quiz) {
 			this.quizesList.push(quiz)
 			console.log(this.quizesList)
@@ -61,7 +70,6 @@ const useQuizesStore = defineStore('quizesStore', {
 				.ref('quizesIds')
 				.once('value')
 			const quizesIds = Object.values(quizKeysRef.val())
-			console.log(quizesIds)
 			this.quizesIdsList = quizesIds
 		},
 
@@ -70,20 +78,16 @@ const useQuizesStore = defineStore('quizesStore', {
 		},
 
 		async getNextPage() {
-			console.log('page next')
 			await this.getQuizes(this.quizesList.at(-1).key)
 			this.currentPage += 1
 		},
 
 		async getPreviousPage() {
-			console.log('page prev')
 			this.currentPage -= 1
+			const previousPageStartFromId = this.currentPage * this.quizesPerPage - 1
 			this.currentPage == 0
 				? await this.getQuizes()
-				: await this.getQuizes(
-						this.quizesIdsList.at(this.currentPage * this.quizesPerPage - 1)
-				  )
-			// TODO: implement logic to select last element's id from current page - 1 or "" if we are on the secod page
+				: await this.getQuizes(this.quizesIdsList.at(previousPageStartFromId))
 		},
 	},
 })
